@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
 const techSchema = new mongoose.Schema({
-  name: {
+  technology: {
+    type: "string",
+  },
+  page: {
     type: "string",
   },
 });

@@ -11,11 +11,6 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
-// const http = require("http");
-
-// const server = http.createServer(app);
-
 const dotenv = require("dotenv");
 
 dotenv.config();
