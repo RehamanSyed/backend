@@ -15,15 +15,13 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 connectDB();
-const Tech = require("./src/models/technlogies");
 
-app.get("/api/v1/alltech", async (req, res) => {
-  console.log("data", Tech);
+// Technology List
+const Tech = require("./src/models/technlogies");
+app.get("/api/v1/allTech", async (req, res) => {
   let data = await Tech?.find();
-  // console.log("technology", data);
   res.send(data);
 });
-
 app.post("/api/v1/createTech", (req, res) => {
   const technology = new Tech(req.body);
   technology
@@ -35,11 +33,33 @@ app.post("/api/v1/createTech", (req, res) => {
       res.status(400).send(e);
     });
 });
-
-app.delete("/api/v1/tech/:id", async (req, res) => {
+app.delete("/api/v1/deleteTech/:id", async (req, res) => {
   const id = req.params.id;
   const data = await Tech.findByIdAndDelete(id);
-  console.log("data ==>", data);
+  // res.send(data);
+  res.send(data);
+});
+
+// Technology Post
+const ReactPost = require("./src/models/react");
+app.post("/api/v1/createReactPost", (req, res) => {
+  const post = new ReactPost(req.body);
+  post
+    .save()
+    .then(() => {
+      res.status(201).send(post);
+    })
+    .catch((e) => {
+      res.status(400).send(e);
+    });
+});
+app.get("/api/v1/allReactPost", async (req, res) => {
+  let data = await ReactPost?.find();
+  res.send(data);
+});
+app.delete("/api/v1/deleteReactPost/:id", async (req, res) => {
+  const id = req.params.id;
+  const data = await ReactPost.findByIdAndDelete(id);
   // res.send(data);
   res.send(data);
 });
