@@ -1,6 +1,9 @@
 const express = require("express");
 const connectDB = require("./connection/db");
+const userRoute = require("./src/routes/user");
 const app = express();
+const path = require("path");
+const router = express.Router();
 const port = 5000;
 app.use(express.json());
 
@@ -15,6 +18,19 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 connectDB();
+
+// app.get("/sample", function (req, res) {
+//   // console.log("Dirname", __dirname);
+
+//   res.sendFile(path.join(__dirname + "/samplefiles/index.html"));
+//   //__dirname : It will resolve to your project folder.
+// });
+
+app.use(express.static(__dirname + "/public"));
+
+// User Auth
+
+app.use("/api/v1/user", userRoute);
 
 // Technology List
 const Tech = require("./src/models/technlogies");
