@@ -29,17 +29,17 @@ connectDB();
 app.use(express.static(__dirname + "/public"));
 
 // User Auth
-
 app.use("/api/v1/user", userRoute);
-
 // Technology List
 const Tech = require("./src/models/technlogies");
+
 app.get("/api/v1/allTech", async (req, res) => {
   let data = await Tech?.find();
   res.send(data);
 });
 app.post("/api/v1/createTech", (req, res) => {
   const technology = new Tech(req.body);
+  console.log("Technologies",technology)
   technology
     .save()
     .then(() => {
@@ -58,6 +58,7 @@ app.delete("/api/v1/deleteTech/:id", async (req, res) => {
 
 // Technology Post
 const ReactPost = require("./src/models/react");
+
 app.post("/api/v1/createReactPost", (req, res) => {
   const post = new ReactPost(req.body);
   post
