@@ -4,7 +4,7 @@ const userRoute = require("./src/routes/user");
 const app = express();
 const path = require("path");
 const router = express.Router();
-const port = 5000;
+const port = process.env.PORT || 5000;
 app.use(express.json());
 
 const cors = require("cors");
@@ -31,7 +31,7 @@ connectDB();
 //   //__dirname : It will resolve to your project folder.
 // });
 
-app.use(express.static(__dirname + "/public"));
+// app.use(express.static(__dirname + "/public"));
 
 // User Auth
 app.use("/api/v1/user", userRoute);
@@ -60,6 +60,9 @@ app.delete("/api/v1/deleteTech/:id", async (req, res) => {
   // res.send(data);
   res.send(data);
 });
+app.get('/api/v1/', function(req, res) {
+  res.send("Hello World!");
+});
 
 // Technology Post
 const ReactPost = require("./src/models/react");
@@ -86,4 +89,8 @@ app.delete("/api/v1/deleteReactPost/:id", async (req, res) => {
   res.send(data);
 });
 
-app.listen(port);
+// app.listen(port);
+
+app.listen(port, () => {
+  console.log(`Server is listening:${port}`);
+});
