@@ -31,7 +31,7 @@ connectDB();
 //   //__dirname : It will resolve to your project folder.
 // });
 
-// app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 
 // User Auth
 app.use("/api/v1/user", userRoute);
