@@ -8,16 +8,16 @@ const port = 5000;
 app.use(express.json());
 
 const cors = require("cors");
-// const corsOptions = {
-//   origin: ['https://prep-api.vercel.app/'],
-//   method:["post","get"],
-//   credentials: true, //access-control-allow-credentials:true
-//   optionSuccessStatus: 200,
-// };
-const corsOptions={
-  origin: "*",
-  credentials: true
-}
+const corsOptions = {
+  origin: ['https://prep-api.vercel.app/'],
+  method:["post","get"],
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+// const corsOptions={
+//   origin: "*",
+//   credentials: true
+// }
 app.use(cors(corsOptions));
 const dotenv = require("dotenv");
 
