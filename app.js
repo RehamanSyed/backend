@@ -1,7 +1,11 @@
 const express = require("express");
 const connectDB = require("./connection/db");
 const userRoute = require("./src/routes/user");
+const techRoute = require("./src/routes/technologies");
+const postRoute = require("./src/routes/post");
+const javascriptRoute = require("./src/routes/javascript");
 const app = express();
+const jwt = require("jsonwebtoken");
 const path = require("path");
 const router = express.Router();
 const port = process.env.PORT || 5000;
@@ -33,61 +37,56 @@ connectDB();
 
 app.use(express.static(__dirname + "/public"));
 
+//sample jwt api
+
+app.get("/api/v1/sample", (req, res) => {
+  const user = {
+    id: 2,
+    name: "syed",
+    mobile: "96656512852",
+  };
+  jwt.sign(
+    { user },
+    "asdfszssdSDFAsadg124asdfgasdhahweadsg",
+    {
+      expiresIn: "60s",
+    },
+    (err, token) => {
+      res.json({
+        token,
+      });
+    }
+  );
+});
+
+// app.get("/api/v1/", verifyToken, (req, res) => {
+//   jwt.verify(
+//     req.token,
+//     "asdfszssdSDFAsadg124asdfgasdhahweadsg",
+//     (err, user) => {
+//       if (err) {
+//         res.send({
+//           message: "Token expired generate another token",
+//         });
+//       } else {
+//         res.json({
+//           user,
+//           message: "success",
+//         });
+//       }
+//     }
+//   );
+//   res.send("Hello World!");
+// });
+
 // User Auth
-app.use("/api/v1/user", userRoute);
+app.use("/api/v1/", userRoute);
 // Technology List
-const Tech = require("./src/models/technlogies");
+app.use("/api/v1/", techRoute);
+// Post List
+app.use("/api/v1/", postRoute);
 
-app.get("/api/v1/allTech", async (req, res) => {
-  let data = await Tech?.find();
-  res.send(data);
-});
-app.post("/api/v1/createTech", (req, res) => {
-  const technology = new Tech(req.body);
-  console.log("Technologies", technology);
-  technology
-    .save()
-    .then(() => {
-      res.status(201).send(technology);
-    })
-    .catch((e) => {
-      res.status(400).send(e);
-    });
-});
-app.delete("/api/v1/deleteTech/:id", async (req, res) => {
-  const id = req.params.id;
-  const data = await Tech.findByIdAndDelete(id);
-  // res.send(data);
-  res.send(data);
-});
-app.get("/api/v1/", function (req, res) {
-  res.send("Hello World!");
-});
-
-// Technology Post
-const ReactPost = require("./src/models/react");
-
-app.post("/api/v1/createReactPost", (req, res) => {
-  const post = new ReactPost(req.body);
-  post
-    .save()
-    .then(() => {
-      res.status(201).send(post);
-    })
-    .catch((e) => {
-      res.status(400).send(e);
-    });
-});
-app.get("/api/v1/allReactPost", async (req, res) => {
-  let data = await ReactPost?.find();
-  res.send(data);
-});
-app.delete("/api/v1/deleteReactPost/:id", async (req, res) => {
-  const id = req.params.id;
-  const data = await ReactPost.findByIdAndDelete(id);
-  // res.send(data);
-  res.send(data);
-});
+app.use("/api/v1/javascript/", javascriptRoute);
 // app.listen(port);
 // Technology Post
 const Post = require("./src/models/post");
@@ -114,3 +113,17 @@ app.get("/api/v1/allPost", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is listening:${port}`);
 });
+
+// module.exportsverifyToken = function verifyToken(req, res, next) {
+//   const barerHeader = req.headers["authorization"];
+//   if (typeof barerHeader !== "undefined") {
+//     const bearer = barerHeader.split(" ");
+//     const token = bearer[1];
+//     req.token = token;
+//     next();
+//   } else {
+//     res.json({
+//       message: "Token is not valid",
+//     });
+//   }
+// }
