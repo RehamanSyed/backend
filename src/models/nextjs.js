@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const reactSchema = new mongoose.Schema({
+const nextjsSchema = new mongoose.Schema({
     question: {
     type: "string",
   },
@@ -12,6 +12,6 @@ const reactSchema = new mongoose.Schema({
   },
 });
 
-const ReactPost = mongoose.model("react", reactSchema);
+const nextjsPost = mongoose.model("nextjs", nextjsSchema);
 
-module.exports = ReactPost;
+module.exports = nextjsPost;
