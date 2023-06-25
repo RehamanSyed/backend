@@ -14,10 +14,10 @@ const cors = require("cors");
 //   credentials: true, //access-control-allow-credentials:true
 //   optionSuccessStatus: 200,
 // };
-const corsOptions={
+const corsOptions = {
   origin: "*",
-  credentials: true
-}
+  credentials: true,
+};
 app.use(cors(corsOptions));
 const dotenv = require("dotenv");
 
@@ -44,7 +44,7 @@ app.get("/api/v1/allTech", async (req, res) => {
 });
 app.post("/api/v1/createTech", (req, res) => {
   const technology = new Tech(req.body);
-  console.log("Technologies",technology)
+  console.log("Technologies", technology);
   technology
     .save()
     .then(() => {
@@ -60,7 +60,7 @@ app.delete("/api/v1/deleteTech/:id", async (req, res) => {
   // res.send(data);
   res.send(data);
 });
-app.get('/api/v1/', function(req, res) {
+app.get("/api/v1/", function (req, res) {
   res.send("Hello World!");
 });
 
@@ -88,9 +88,29 @@ app.delete("/api/v1/deleteReactPost/:id", async (req, res) => {
   // res.send(data);
   res.send(data);
 });
-
 // app.listen(port);
+// Technology Post
+const Post = require("./src/models/post");
 
+app.post("/api/v1/createPost", (req, res) => {
+  const techpost = new Post(req.body);
+  techpost
+    .save()
+    .then(() => {
+      res.status(201).send(techpost);
+    })
+    .catch((e) => {
+      res.status(400).send(e);
+    });
+});
+
+app.get("/api/v1/allPost", async (req, res) => {
+  let data = await Post?.find({
+    userId: req.body.userId,
+    techId: req.body.techId,
+  });
+  res.send(data);
+});
 app.listen(port, () => {
   console.log(`Server is listening:${port}`);
 });
