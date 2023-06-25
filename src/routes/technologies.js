@@ -9,7 +9,7 @@ const secretKey =
 
 router.get("/allTech", verifyToken, async (req, res) => {
   let techData = await Tech?.find();
-    jwt.verify(req.token, secretKey, (err, authData) => {
+  jwt.verify(req.token, secretKey, (err, authData) => {
     if (err) {
       res.send({
         message: "Token expired generate another token",
@@ -19,7 +19,7 @@ router.get("/allTech", verifyToken, async (req, res) => {
         techData,
       });
     }
-  }); 
+  });
 });
 
 router.post("createTech", verifyToken, (req, res) => {
@@ -32,7 +32,7 @@ router.post("createTech", verifyToken, (req, res) => {
         message: "Token expired generate another token",
       });
     } else {
-        technology
+      technology
         .save()
         .then(() => {
           res.status(201).send(technology);
@@ -42,9 +42,6 @@ router.post("createTech", verifyToken, (req, res) => {
         });
     }
   });
-
-
-
 });
 
 router.delete("deleteTech/:id", verifyToken, async (req, res) => {
@@ -58,11 +55,9 @@ router.delete("deleteTech/:id", verifyToken, async (req, res) => {
         message: "Token expired generate another token",
       });
     } else {
-        res.send(deleteTech);
+      res.send(deleteTech);
     }
   });
-  
- 
 });
 
 module.exports = router;

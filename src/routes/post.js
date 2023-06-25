@@ -1,11 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
-
-const ReactPost = require("../models/react");
+const techPost = require("../models/post");
 
 router.post("/createPost", (req, res) => {
-  const post = new ReactPost(req.body);
+  let post = new techPost(req.body);
   post
     .save()
     .then(() => {
@@ -18,7 +16,11 @@ router.post("/createPost", (req, res) => {
     });
 });
 router.get("/allPost", async (req, res) => {
-  let data = await ReactPost?.find();
+  console.log("body request", req.body.userId, req.body.techId);
+  let data = await techPost?.find({
+    userId: req.body.userId,
+    techId: req.body.techId,
+  });
   res.send(data);
 });
 router.put("/updatePost/:id", async (req, res) => {
@@ -31,20 +33,20 @@ router.put("/updatePost/:id", async (req, res) => {
   };
 
   console.log(updateData);
-  const data = await ReactPost.findByIdAndUpdate(id, { $set: updateData });
+  const data = await techPost.findByIdAndUpdate(id, { $set: updateData });
   res.json({
     message: " succesfully updated",
   });
 });
 router.get("/getPostbyId/:id", async (req, res) => {
-  const id = req.params.id; 
+  const id = req.params.id;
 
-  const data = await ReactPost.findById(id);
+  const data = await techPost.findById(id);
   res.send(data);
 });
 router.delete("/deletePost/:id", async (req, res) => {
   const id = req.params.id;
-  const data = await ReactPost.findByIdAndDelete(id);
+  const data = await techPost.findByIdAndDelete(id);
   // res.send(data);
   res.send(data);
 });

@@ -18,7 +18,7 @@ async function handleUserSignIn(req, res) {
     { user },
     secretKey,
     {
-      expiresIn: "300s",
+      expiresIn: "5000000s",
     },
     (err, token) => {
       if (!user) {
@@ -32,6 +32,7 @@ async function handleUserSignIn(req, res) {
           id: user.id,
           name: user.name,
           email: user.email,
+          password: user.password,
         },
         token,
         success: true,
@@ -39,7 +40,5 @@ async function handleUserSignIn(req, res) {
       });
     }
   );
-
-
 }
 module.exports = { handleUserSignUp, handleUserSignIn };

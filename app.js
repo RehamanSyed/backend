@@ -3,7 +3,7 @@ const connectDB = require("./connection/db");
 const userRoute = require("./src/routes/user");
 const techRoute = require("./src/routes/technologies");
 const postRoute = require("./src/routes/post");
-const javascriptRoute = require("./src/routes/javascript");
+
 const app = express();
 const jwt = require("jsonwebtoken");
 const path = require("path");
@@ -80,50 +80,36 @@ app.get("/api/v1/sample", (req, res) => {
 // });
 
 // User Auth
+
 app.use("/api/v1/", userRoute);
-// Technology List
 app.use("/api/v1/", techRoute);
-// Post List
 app.use("/api/v1/", postRoute);
 
-app.use("/api/v1/javascript/", javascriptRoute);
-// app.listen(port);
+// app.listen(port);z
 // Technology Post
-const Post = require("./src/models/post");
+// const Post = require("./src/models/post");
+// app.post("/api/v1/createPost", async (req, res) => {
+//   let techpost = await new Post(req.body);
+//   console.log("Test data", techpost);
+//   techpost
+//     .save()
+//     .then((post) => {
+//       res.status(201).send(post);
+//     })
+//     .catch((e) => {
+//       res.status(400).send(e);
+//     });
+// });
 
-app.post("/api/v1/createPost", (req, res) => {
-  const techpost = new Post(req.body);
-  techpost
-    .save()
-    .then(() => {
-      res.status(201).send(techpost);
-    })
-    .catch((e) => {
-      res.status(400).send(e);
-    });
-});
+// app.get("/api/v1/allPost", async (req, res) => {
+//   let data = await Post?.find({
+//     userId: req.body.userId,
+//     techId: req.body.techId,
+//   });
+//   console.log(data);
+//   res.send(data);
+// });
 
-app.get("/api/v1/allPost", async (req, res) => {
-  let data = await Post?.find({
-    userId: req.body.userId,
-    techId: req.body.techId,
-  });
-  res.send(data);
-});
 app.listen(port, () => {
   console.log(`Server is listening:${port}`);
 });
-
-// module.exportsverifyToken = function verifyToken(req, res, next) {
-//   const barerHeader = req.headers["authorization"];
-//   if (typeof barerHeader !== "undefined") {
-//     const bearer = barerHeader.split(" ");
-//     const token = bearer[1];
-//     req.token = token;
-//     next();
-//   } else {
-//     res.json({
-//       message: "Token is not valid",
-//     });
-//   }
-// }
