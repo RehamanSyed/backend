@@ -36,7 +36,7 @@ router.post("/createPost", verifyToken, (req, res) => {
 router.get("/allPost", verifyToken, async (req, res) => {
   try {
     const { techId, userId } = req.query; // Use req.query instead of req.body to access query parameters
-    console.log("query parameters -->", req.query);
+    // console.log("query parameters -->", req.query);
     let techData = await Techpost.find({ techId: techId, userId: userId });
 
     jwt.verify(req.token, secretKey, (err, authData) => {
@@ -54,6 +54,10 @@ router.get("/allPost", verifyToken, async (req, res) => {
   }
 });
 router.put("/updatePost/:id", async (req, res) => {
+  try {
+  } catch (err) {
+    console.log(err);
+  }
   const id = req.params.id;
 
   const updateData = {
@@ -69,16 +73,33 @@ router.put("/updatePost/:id", async (req, res) => {
   });
 });
 router.get("/getPostbyId/:id", async (req, res) => {
+  try {
+  } catch (err) {
+    console.log(err);
+  }
   const id = req.params.id;
-
   const data = await Techpost.findById(id);
   res.send(data);
 });
-router.delete("/deletePost/:id", async (req, res) => {
-  const id = req.params.id;
-  const data = await Techpost.findByIdAndDelete(id);
-  // res.send(data);
-  res.send(data);
+router.delete("/deletePost/:id", verifyToken, async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("Id from request param", req.params.id);
+    const data = await Techpost.findByIdAndDelete(id);
+    // res.send(data);
+
+    jwt.verify(req.token, secretKey, (err, authData) => {
+      if (err) {
+        res.send({
+          message: "Token expired. Generate another token.",
+        });
+      } else {
+        res.send(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;
