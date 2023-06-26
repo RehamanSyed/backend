@@ -8,8 +8,6 @@ const secretKey =
   process.env.SECRET_KEY ||
   "1CDSF3245Aasdhgaw42512abafdshjajet2sgae3safsdfaqwashfadsXdhrmrjjrGR";
 
-console.log("techPost", Techpost);
-
 router.post("/createPost", verifyToken, (req, res) => {
   let postData = new Techpost(req.body);
 
@@ -36,18 +34,24 @@ router.post("/createPost", verifyToken, (req, res) => {
   });
 });
 router.get("/allPost", verifyToken, async (req, res) => {
-  const { userId, techId } = req.body;
-  console.log("body request-->", userId, techId);
-  let techData = await Techpost?.find();
-  jwt.verify(req.token, secretKey, (err, authData) => {
-    if (err) {
-      res.send({
-        message: "Token expired generate another token",
-      });
-    } else {
-      res.json(techData);
-    }
-  });
+  try {
+    const { techId, userId } = req.query; // Use req.query instead of req.body to access query parameters
+    console.log("query parameters -->", req.query);
+    let techData = await Techpost.find({ techId: techId, userId: userId });
+
+    jwt.verify(req.token, secretKey, (err, authData) => {
+      if (err) {
+        res.send({
+          message: "Token expired. Generate another token.",
+        });
+      } else {
+        res.json(techData);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 router.put("/updatePost/:id", async (req, res) => {
   const id = req.params.id;
