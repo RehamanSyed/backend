@@ -1,27 +1,53 @@
 const express = require("express");
 const router = express.Router();
-const techPost = require("../models/post");
+const Techpost = require("../models/post");
 
-router.post("/createPost", (req, res) => {
-  let post = new techPost(req.body);
-  post
-    .save()
-    .then(() => {
-      res.status(201).json({
-        message: "your question succesfully added",
+const { verifyToken } = require("../controllers/verifyToken");
+const jwt = require("jsonwebtoken");
+const secretKey =
+  process.env.SECRET_KEY ||
+  "1CDSF3245Aasdhgaw42512abafdshjajet2sgae3safsdfaqwashfadsXdhrmrjjrGR";
+
+console.log("techPost", Techpost);
+
+router.post("/createPost", verifyToken, (req, res) => {
+  let postData = new Techpost(req.body);
+
+  console.log(postData);
+
+  jwt.verify(req.token, secretKey, (err, authData) => {
+    if (err) {
+      res.send({
+        message: "Token expired generate another token",
       });
-    })
-    .catch((e) => {
-      res.status(400).send(e);
-    });
-});
-router.get("/allPost", async (req, res) => {
-  console.log("body request", req.body.userId, req.body.techId);
-  let data = await techPost?.find({
-    userId: req.body.userId,
-    techId: req.body.techId,
+    } else {
+      postData
+        .save()
+        .then(() => {
+          res.status(201).json({
+            message: "your question succesfully added",
+          });
+        })
+        .catch((e) => {
+          console.log("error in post dat", e);
+          res.status(400).send(e);
+        });
+    }
   });
-  res.send(data);
+});
+router.get("/allPost", verifyToken, async (req, res) => {
+  const { userId, techId } = req.body;
+  console.log("body request-->", userId, techId);
+  let techData = await Techpost?.find();
+  jwt.verify(req.token, secretKey, (err, authData) => {
+    if (err) {
+      res.send({
+        message: "Token expired generate another token",
+      });
+    } else {
+      res.json(techData);
+    }
+  });
 });
 router.put("/updatePost/:id", async (req, res) => {
   const id = req.params.id;
@@ -33,7 +59,7 @@ router.put("/updatePost/:id", async (req, res) => {
   };
 
   console.log(updateData);
-  const data = await techPost.findByIdAndUpdate(id, { $set: updateData });
+  const data = await Techpost.findByIdAndUpdate(id, { $set: updateData });
   res.json({
     message: " succesfully updated",
   });
@@ -41,12 +67,12 @@ router.put("/updatePost/:id", async (req, res) => {
 router.get("/getPostbyId/:id", async (req, res) => {
   const id = req.params.id;
 
-  const data = await techPost.findById(id);
+  const data = await Techpost.findById(id);
   res.send(data);
 });
 router.delete("/deletePost/:id", async (req, res) => {
   const id = req.params.id;
-  const data = await techPost.findByIdAndDelete(id);
+  const data = await Techpost.findByIdAndDelete(id);
   // res.send(data);
   res.send(data);
 });

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   techId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "technology",
@@ -23,6 +22,6 @@ const postSchema = new mongoose.Schema({
   },
 });
 
-const Post = mongoose.model("Post", postSchema);
+const Techpost = mongoose.model("Post", postSchema);
 
-module.exports = Post;
+module.exports = Techpost;

@@ -22,7 +22,7 @@ router.get("/allTech", verifyToken, async (req, res) => {
   });
 });
 
-router.post("createTech", verifyToken, (req, res) => {
+router.post("/createTech", verifyToken, (req, res) => {
   const technology = new Tech(req.body);
   console.log("Technologies", technology);
 
@@ -44,7 +44,7 @@ router.post("createTech", verifyToken, (req, res) => {
   });
 });
 
-router.delete("deleteTech/:id", verifyToken, async (req, res) => {
+router.delete("/deleteTech/:id", verifyToken, async (req, res) => {
   const id = req.params.id;
   const deleteTech = await Tech.findByIdAndDelete(id);
   // res.send(data);
