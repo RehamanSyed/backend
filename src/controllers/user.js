@@ -18,7 +18,7 @@ async function handleUserSignIn(req, res) {
     { user },
     secretKey,
     {
-      expiresIn: "5000000s",
+      expiresIn: "600s",
     },
     (err, token) => {
       if (!user) {
@@ -27,13 +27,19 @@ async function handleUserSignIn(req, res) {
           message: "Invalid Username or Password",
         });
       }
+      // const userdata = {
+      //   user: {
+      //     id: user.id,
+      //     name: user.name,
+      //     email: user.email,
+      //     password: user.password,
+      //   },
+      // };
       res.json({
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          password: user.password,
-        },
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        password: user.password,
         token,
         success: true,
         message: "Logged in successfully.",
