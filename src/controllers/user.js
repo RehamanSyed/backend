@@ -18,7 +18,7 @@ async function handleUserSignIn(req, res) {
     { user },
     secretKey,
     {
-      expiresIn: "600s",
+      expiresIn: "600000s",
     },
     (err, token) => {
       if (!user) {
