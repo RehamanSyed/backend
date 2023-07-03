@@ -74,7 +74,7 @@ router.post("/createPost", verifyToken, (req, res) => {
 router.put("/updatePost/:id", verifyToken, async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("testigds od", id);
+
     const updateData = {
       question: req.body.question,
       answer: req.body.answer,
@@ -102,11 +102,12 @@ router.put("/updatePost/:id", verifyToken, async (req, res) => {
   }
 });
 router.get("/getPostbyId/:id", verifyToken, async (req, res) => {
+  console.log("req--<", req.params.id);
   try {
     const id = req.params.id;
     console.log("getPostbyId", id);
     const data = await Techpost.findById(id);
-    console.log(data);
+    console.log("post id data", data);
 
     jwt.verify(req.token, secretKey, (err, authData) => {
       if (err) {
@@ -115,9 +116,7 @@ router.get("/getPostbyId/:id", verifyToken, async (req, res) => {
           message: err,
         });
       } else {
-        res.json({
-          data,
-        });
+        res.json(data);
       }
     });
   } catch (err) {
