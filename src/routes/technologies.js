@@ -8,7 +8,8 @@ const secretKey =
   "1CDSF3245Aasdhgaw42512abafdshjajet2sgae3safsdfaqwashfadsXdhrmrjjrGR";
 
 router.get("/allTech", verifyToken, async (req, res) => {
-  let techData = await Tech?.find();
+  const { userId } = req.query;
+  let techData = await Tech?.find({ userId: userId });
   jwt.verify(req.token, secretKey, (err, authData) => {
     if (err) {
       res.send({
@@ -23,7 +24,9 @@ router.get("/allTech", verifyToken, async (req, res) => {
 });
 
 router.post("/createTech", verifyToken, (req, res) => {
+  
   const technology = new Tech(req.body);
+
   console.log("Technologies", technology);
 
   jwt.verify(req.token, secretKey, (err, authData) => {

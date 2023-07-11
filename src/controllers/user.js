@@ -6,13 +6,23 @@ const secretKey =
 console.log(secretKey);
 
 async function handleUserSignUp(req, res) {
+  
   const { name, password, email } = req.body;
+  console.log(name, password, email)
   const user = await User.create({ name, password, email });
+  res.json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    password: user.password,
+    success: true,
+    message: "User registered successfully.",
+  });
 }
 async function handleUserSignIn(req, res) {
   const { name, email, password } = req.body;
-  console.log(res.json);
-  const user = await User.findOne({ email, password });
+  console.log("respons json",name, password );
+  const user = await User.findOne({ name, password });
   console.log(user);
   jwt.sign(
     { user },
