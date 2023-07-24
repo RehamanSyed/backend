@@ -1,4 +1,5 @@
-const User = require("../models/user");
+const UserModel = require("../models/user");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secretKey =
   process.env.SECRET_KEY ||
@@ -6,23 +7,43 @@ const secretKey =
 console.log(secretKey);
 
 async function handleUserSignUp(req, res) {
-  
-  const { name, password, email } = req.body;
-  console.log(name, password, email)
-  const user = await User.create({ name, password, email });
-  res.json({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    password: user.password,
-    success: true,
-    message: "User registered successfully.",
-  });
+  const { name, email, password } = req.body;
+
+  const user = await UserModel.findOne({ email: email });
+
+  if (user) {
+    res.send({
+      message: "User already exists",
+      success: false,
+    });
+  } else {
+    if (name && email && password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashpassword = await bcrypt.hash(password, salt);
+      console.log("hashpassword", hashpassword);
+      await UserModel.create({
+        name: name,
+        password: hashpassword,
+        email: email,
+      });
+
+      res.send({
+        message: "User registered successfully.",
+        success: true,
+      });
+    } else {
+      res.send({
+        message: "All Fields are required",
+        success: true,
+      });
+    }
+  }
 }
+
 async function handleUserSignIn(req, res) {
   const { name, email, password } = req.body;
-  console.log("respons json",name, password );
-  const user = await User.findOne({ name, password });
+  console.log("respons json", name, password);
+  const user = await UserModel.findOne({ name, password });
   console.log(user);
   jwt.sign(
     { user },
@@ -57,4 +78,5 @@ async function handleUserSignIn(req, res) {
     }
   );
 }
+
 module.exports = { handleUserSignUp, handleUserSignIn };

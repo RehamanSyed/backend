@@ -24,7 +24,6 @@ router.get("/allTech", verifyToken, async (req, res) => {
 });
 
 router.post("/createTech", verifyToken, (req, res) => {
-  
   const technology = new Tech(req.body);
 
   console.log("Technologies", technology);

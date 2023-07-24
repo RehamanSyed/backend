@@ -105,10 +105,7 @@ router.get("/getPostbyId/:id", verifyToken, async (req, res) => {
   console.log("req--<", req.params.id);
   try {
     const id = req.params.id;
-    console.log("getPostbyId", id);
     const data = await Techpost.findById(id);
-    console.log("post id data", data);
-
     jwt.verify(req.token, secretKey, (err, authData) => {
       if (err) {
         console.log(err);
